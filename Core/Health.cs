@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using RPG.Saving;
 
 namespace RPG.Core {
@@ -25,6 +26,8 @@ namespace RPG.Core {
             isDead = true;
             GetComponent<Animator>().SetTrigger("death");
             GetComponent<ActionScheduler>().CancelCurrentAction();
+            GetComponent<CapsuleCollider>().enabled = false;
+            GetComponent<NavMeshAgent>().enabled = false;
         }
 
         public object CaptureState() {
