@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using RPG.Core;
 using RPG.Saving;
+using RPG.Attributes;
 
 namespace RPG.Movement {
   public class Mover : MonoBehaviour, IAction, ISaveable
@@ -18,7 +19,7 @@ namespace RPG.Movement {
       public SerializableVector3 rotation;
     }
 
-    void Start() {
+    private void Awake() {
       navMeshAgent = GetComponent<NavMeshAgent>();
       health = GetComponent<Health>();
     }
@@ -63,6 +64,7 @@ namespace RPG.Movement {
       transform.position = data.position.ToVector();
       transform.eulerAngles = data.rotation.ToVector();
       GetComponent<NavMeshAgent>().enabled = true;
+      GetComponent<ActionScheduler>().CancelCurrentAction();
     }
   }
 }

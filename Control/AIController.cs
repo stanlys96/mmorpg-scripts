@@ -5,6 +5,8 @@ using RPG.Combat;
 using RPG.Core;
 using RPG.Movement;
 using UnityEngine.AI;
+using RPG.Attributes;
+using GameDevTV.Utils;
 
 namespace RPG.Control {
     public class AIController : MonoBehaviour
@@ -13,7 +15,7 @@ namespace RPG.Control {
         GameObject player;
         Fighter fighter;
         Health health;
-        Vector3 guardPosition;
+        LazyValue<Vector3> guardPosition;
         Mover mover;
         float timeSinceLastSawPlayer = Mathf.Infinity;
         float timeSinceArrivedAtWaypoint = Mathf.Infinity;
@@ -27,12 +29,20 @@ namespace RPG.Control {
         private float patrolSpeed = 3f;
         private float chaseSpeed = 5f;
 
-        void Start() {
+        private void Awake() {
             player = GameObject.FindWithTag("Player");
             fighter = GetComponent<Fighter>();
             health = GetComponent<Health>();
             mover = GetComponent<Mover>();
-            guardPosition = transform.position;
+            guardPosition = new LazyValue<Vector3>(GetGuardPosition);
+        }
+
+        private Vector3 GetGuardPosition() {
+            return transform.position;
+        }
+
+        void Start() {
+            guardPosition.ForceInit();
         }
 
         // Update is called once per frame
@@ -68,7 +78,7 @@ namespace RPG.Control {
         private void PatrolBehaviour() {
             GetComponent<NavMeshAgent>().speed = patrolSpeed;
             GetComponent<Animator>().SetFloat("forwardSpeed", patrolSpeed);
-            Vector3 nextPosition = guardPosition;
+            Vector3 nextPosition = guardPosition.value;
 
             if (patrolPath != null) {
                 if (AtWaypoint()) {

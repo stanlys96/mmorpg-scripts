@@ -10,11 +10,11 @@ namespace RPG.Core {
 
     private Vector3 previousPosition;
 
-    private Vector3 cameraOffset;
+    private float cameraOffset = 1f;
 
     private void Start()
     {
-      cameraOffset = cam.transform.position - target.position;
+      cameraOffset = cam.transform.position.z - transform.position.z;
     }
 
     // Update is called once per frame
@@ -30,10 +30,9 @@ namespace RPG.Core {
       {
         Vector3 direction = previousPosition - cam.ScreenToViewportPoint(Input.mousePosition);
         cam.transform.position = target.position;
-        float distanceDifference = Vector3.Distance(cam.transform.position, target.position);
         cam.transform.Rotate(new Vector3(1, 0, 0), direction.y * 180);
         cam.transform.Rotate(new Vector3(0, 1, 0), -direction.x * 180, Space.World);
-        cam.transform.Translate(0, 0, -10);
+        cam.transform.Translate(0, 0, -9);
 
         previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
       }

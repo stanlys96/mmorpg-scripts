@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPG.Movement;
 using RPG.Combat;
+using RPG.Attributes;
 using RPG.Core;
 
 namespace RPG.Control {
@@ -10,9 +11,10 @@ namespace RPG.Control {
     {
         Health health;
 
-        void Start() {
+        void Awake() {
             health = GetComponent<Health>();
         }
+        
         void Update() {
             if (health.IsDead()) return;
             if (InteractWithCombat()) {
