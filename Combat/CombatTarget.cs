@@ -2,21 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RPG.Attributes;
+using RPG.Control;
 
 namespace RPG.Combat {
     [RequireComponent(typeof(Health))]
-    public class CombatTarget : MonoBehaviour
+    public class CombatTarget : MonoBehaviour, IRaycastable
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-            
+        const string category = "CombatTarget";
+
+        public bool HandleRaycast(PlayerController callingController) {
+            if (!callingController.GetComponent<Fighter>().CanAttack(gameObject)) {
+                return false;
+            }
+            if (Input.GetMouseButton(1)) {
+                callingController.GetComponent<Fighter>().Attack(gameObject);
+            }
+            return true;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            
+        public CursorType GetCursorType() {
+            return CursorType.Combat;
         }
     }
 }

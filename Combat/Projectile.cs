@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RPG.Attributes;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RPG.Combat {
     public class Projectile : MonoBehaviour
@@ -12,6 +13,7 @@ namespace RPG.Combat {
         [SerializeField] float maxLifeTime = 10f;
         [SerializeField] GameObject[] gameObjectHit = null;
         [SerializeField] float lifeAfterImpact = 0.2f;
+        [SerializeField] UnityEvent onHit;
 
         Health target = null;
         GameObject instigator = null;
@@ -50,6 +52,9 @@ namespace RPG.Combat {
             if (other.GetComponent<Health>() != target) return;
             if (target.IsDead()) return;
             speed = 0;
+
+            onHit.Invoke();
+
             if (impactEffect != null) {
                 GameObject effect = Instantiate(impactEffect, transform.position, transform.rotation);
             }
